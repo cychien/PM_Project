@@ -1,0 +1,10 @@
+{
+    "verbose": true,
+    "ignore": ["public/"],
+    "events": {
+    },
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js hbs"
+}
