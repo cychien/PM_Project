@@ -1,0 +1,53 @@
+
+		<div class="container" style="margin-top:60px">
+		    
+			<h1 style="margin-top:60px">排程: 出貨</h1>
+			
+			<table class="table table-hover">
+				<thead>
+				<tr>
+				<th scope="col">顧客ID</th>
+				<th scope="col">顧客姓名</th>
+				<th scope="col">購買金額</th>
+				<th scope="col">預計出貨日</th>
+				<th scope="col">狀態</th>
+				</tr>
+				</thead>
+			<tbody>
+				{{#each order_schedule}}
+				<tr>
+				<td>{{customer_id}}</td>
+				<td>{{customer_name}}</td>
+				<td>{{order_total}}</td>
+				<td>{{estimated_ship_date}}</td>
+				<td>{{order_status}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+			</table>
+			<h1 style="margin-top:60px">排程: 訂購原料</h1>
+			
+			<table class="table table-hover">
+				<thead>
+				<tr>
+				<th scope="col">原料名稱</th>
+				<th scope="col">剩餘比例</th>
+				<th scope="col">預計訂購量</th>
+				<th scope="col">預計訂購日</th>
+				<th scope="col">預計到貨日</th>
+				</tr>
+				</thead>
+			<tbody>
+				{{#each ingredient_schedule}}
+				<tr>
+				<td>{{ingredient_name}}</td>
+				<td>{{remaining_percentage}}</td>
+				<td>{{estimated_quantity}}</td>
+				<td>{{estimated_order_date}}</td>
+				<td>{{estimated_arrived_date}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+			</table>
+		</div> <!-- /container -->
+		
