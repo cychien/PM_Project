@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/index', function (req, res, next) {
-    res.render('company/company-index', {
+    res.render('company/index', {
         title: '管理頁面'
     });
 });
