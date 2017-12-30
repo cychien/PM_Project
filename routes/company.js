@@ -3,6 +3,8 @@ var router = express.Router();
 var mysql = require('mysql');
 var IM = require('../modules/ingredient-management.js');
 
+var AM = require('./modules/account-manager');
+
 var connection = mysql.createConnection({
     host: "scl3.mysql.database.azure.com",
     user: "admin1104@scl3",
@@ -14,7 +16,29 @@ var connection = mysql.createConnection({
 connection.connect();
 
 /* GET home page. */
-router.get('/index', function (req, res, next) {
+router.get('/', function (req, res, next) {
+
+    // main login page //
+    app.get('/', function (req, res) {
+        // check if the user's credentials are saved in a cookie //
+        if (req.cookies.user == undefined || req.cookies.pass == undefined) {
+            res.render('login', {});
+        } else {
+            // attempt automatic login //
+            AM.autoLogin(req.cookies.user, req.cookies.pass, function (o) {
+                if (o != null) {
+                    req.session.user = o;
+                    res.redirect('/home');
+                } else {
+                    res.render('login', {
+                        title: 'Hello - Please Login To Your Account'
+                    });
+                }
+            });
+        }
+    });
+
+
     res.render('company/index', {
         title: '管理頁面'
     });
