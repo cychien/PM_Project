@@ -68,8 +68,8 @@ router.get('/ingredient-management', function (req, res, next) {
 
                 let ingredientKind = {};
                 ({
-                    id: ingredient.id,
-                    name: ingredient.name,
+                    id: ingredientKind.id,
+                    name: ingredientKind.name,
                 } = result[i]);
                 ingredientKinds.push(ingredientKind);
             }
@@ -78,36 +78,68 @@ router.get('/ingredient-management', function (req, res, next) {
 
             data.ingredientKinds = ingredientKinds;
 
-            resolve(ingredients);
+            resolve();
         });
     });
 
     //利用ingredient id尋找每樣ingredient的purchase date
-    promise.then((ingredients) => {
+    promise.then(() => {
         var outOfInventoryIngredients = [];
 
-        (function loop(i) {
-            const promise = new Promise((resolve, reject) => {
-                var sql = ''
+        return new Promise((resolve, reject) => {
+			var sql = 'SELECT ingredient.id,ingredient.name,inventory,safe_inventory,day_demand, supplier.name AS supplierName FROM pmproject.ingredient,pmproject.supplier\
+						   where inventory<safe_inventory and supplier.id=ingredient.supplier_id';
+                connection.query(sql, function (error, result) {
+                    if (error) {
+                        throw error;
+                    }
+					
+					for (let i = 0; i < result.length; i++) {
+						let outOfInventoryIngredient = {};
+						({
+						name: outOfInventoryIngredient.name,
+						supplierName: outOfInventoryIngredient.supplier
+						} = result[i]);
+						outOfInventoryIngredients.push(outOfInventoryIngredient);
+					}
+					data.outOfInventoryIngredients = outOfInventoryIngredients;
+					resolve();
+                });
+		});
+                
+
+    })
+	.then(() => {
+		var closeToROPIngredients = [];
+		
+		return new Promise((resolve, reject) => {
+                var sql = 'SELECT id,name,inventory,safe_inventory,day_demand,((inventory-safe_inventory)/day_demand) AS dayRatio FROM pmproject.ingredient\
+							where inventory>safe_inventory and ((inventory-safe_inventory)/day_demand)<3;'
                 connection.query(sql, function (error, result) {
                     if (error) {
                         throw error;
                     }
 
-                    let outOfInventoryIngredient = {};
-                    //callback，purchase date寫在這!
-                    outOfInventoryIngredients.push(outOfInventoryIngredient);
-                    resolve();
+					for (let i = 0; i < result.length; i++) {
+						let closeToROPIngredient = {};
+						({
+						name: closeToROPIngredient.name
+						} = result[i]);
+						closeToROPIngredient.dayRatio = Math.ceil(result[i].dayRatio);
+						closeToROPIngredients.push(closeToROPIngredient)
+					}
+					data.closeToROPIngredients = closeToROPIngredients;
+					resolve();
                 });
-            }).then(() => i >= ingredients.length - 1 || loop(i + 1));
-        })(0);
-
-        connection.end();
-        data.outOfInventoryIngredients = outOfInventoryIngredients;
-        res.render('company/ingredient-management', data);
-    }).catch((e) => {
+				});
+    })
+	.then(() => {
+		res.render('company/ingredient-management', data);
+	})
+	.catch((e) => {
         console.log(e)
     });
+        
 });
 
 router.get('/schedule', function (req, res, next) {

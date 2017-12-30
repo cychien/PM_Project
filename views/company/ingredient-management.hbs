@@ -23,7 +23,13 @@
 
     {{#each outOfInventoryIngredients}}
     <div class="alert alert-danger" role="alert">
-        (注意) {{name}}存貨數量即將不足，請於{{purchaseDate}}前向{{supplier}}訂購。
+        (注意) {{name}}存貨數量即將不足，請立即向{{supplier}}訂購。
+    </div>
+    {{/each}}
+	
+	{{#each closeToROPIngredients}}
+    <div class="alert alert-warning" role="alert">
+        (注意) {{name}}存貨數量即將於{{dayRatio}}天內低於安全存量，請適時監控。
     </div>
     {{/each}}
     <h1 style="margin-top:60px">補貨</h1>
@@ -33,7 +39,7 @@
             <label for="exampleFormControlSelect1">原料名稱</label>
             <select class="form-control" id="exampleFormControlSelect1">
                 {{#each ingredientKinds}}
-                <option>{{this}}</option>
+                <option id="{{id}}">{{name}}</option> 
                 {{/each}}
             </select>
         </div>
