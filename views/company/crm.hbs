@@ -3,7 +3,6 @@
 	<h1 style="margin-top:60px">顧客關係管理: RFM</h1>
 	<table class="table table-hover">
 		<thead>
-			<th scope="col">ID</th>
 			<th scope="col">顧客姓名</th>
 			<th scope="col">最近購買時間</th>
 			<th scope="col">購買頻率</th>
@@ -11,9 +10,8 @@
 
 		</thead>
 		<tbody>
-			{{#each customer}}
+			{{#each customers}}
 			<tr>
-				<td>{{customer_id}}</td>
 				<td>{{customer_name}}</td>
 				<td>{{customer_r}}</td>
 				<td>{{customer_f}}</td>

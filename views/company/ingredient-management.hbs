@@ -5,29 +5,25 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">原料編號</th>
                 <th scope="col">原料名稱</th>
-                <th scope="col">剩餘存量比例</th>
+                <th scope="col">剩餘存量</th>
                 <th scope="col">安全存量</th>
-                <th scope="col">預計再訂購日</th>
             </tr>
         </thead>
         <tbody>
-            {{#each ingredient}}
+            {{#each ingredients}}
             <tr>
-                <th scope="row">{{ingredient_id}}</th>
-                <td>{{ingredient_name}}</td>
-                <td>{{ingredient_inventory}}</td>
-                <td>{{ingredient_safe_inventory}}</td>
-                <td>{{plan_to_purchase_date}}</td>
+                <td>{{name}}</td>
+                <td>{{inventory}}</td>
+                <td>{{safeInventory}}</td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 
-    {{#each out_of_inventory}}
+    {{#each outOfInventoryIngredients}}
     <div class="alert alert-danger" role="alert">
-        (注意) {{ingredient_name}}存貨數量即將不足，請於{{plan_to_purchase_date}}前向{{supplier_name}}訂購。
+        (注意) {{name}}存貨數量即將不足，請於{{purchaseDate}}前向{{supplier}}訂購。
     </div>
     {{/each}}
     <h1 style="margin-top:60px">補貨</h1>
@@ -36,8 +32,8 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1">原料名稱</label>
             <select class="form-control" id="exampleFormControlSelect1">
-                {{#each ingredient_kind}}
-                <option>{{ingredient_name}}</option>
+                {{#each ingredientKinds}}
+                <option>{{this}}</option>
                 {{/each}}
             </select>
         </div>
@@ -53,14 +49,8 @@
             <label for="exampleFormControlSelect2">購買日期</label>
             <input type="date" class="form-control" id="purchase_date" placeholder="purchase_quantity">
         </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">訂購廠商</label>
-            <select class="form-control" id="supplier">
-                {{#each supplier}}
-                <option>{{supplier_name}}</option>
-                {{/each}}
-            </select>
-        </div>
+        <a href="#" class="btn btn-primary btn-primary">
+            <span class="glyphicon glyphicon-send"></span> 送出</a>
     </form>
 </div>
 <!-- /container -->
