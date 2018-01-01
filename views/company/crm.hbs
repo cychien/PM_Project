@@ -7,15 +7,16 @@
 			<th scope="col">最近購買時間</th>
 			<th scope="col">購買頻率</th>
 			<th scope="col">購買金額</th>
-
+			<th scope="col">代號組別</th>
 		</thead>
 		<tbody>
 			{{#each customers}}
 			<tr>
-				<td>{{customer_name}}</td>
-				<td>{{customer_r}}</td>
-				<td>{{customer_f}}</td>
-				<td>{{customer_m}}</td>
+				<td id="{{id}}">{{name}}</td>
+				<td>{{r}}</td>
+				<td>{{f}}</td>
+				<td>{{m}}</td>
+				<td>{{team}}</td>
 			</tr>
 			{{/each}}
 		</tbody>

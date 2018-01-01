@@ -1,5 +1,18 @@
 <div class="container" style="margin-top:60px">
 
+    {{#if flash}}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="font-size: 20px;">{{flash.title}}</p>
+        <p>補貨原料: {{flash.ingredientName}}</p>
+        <p>補貨數量: {{flash.purchaseQuantity}}</p>
+        <p>補貨日期: {{flash.purchaseDate}}</p>
+        <p>原料單價: {{flash.unitCost}}</p>
+    </div>
+    {{/if}}
+
     <h1 style="margin-top:60px">原料管理</h1>
 
     <table class="table table-hover">
@@ -8,6 +21,7 @@
                 <th scope="col">原料名稱</th>
                 <th scope="col">剩餘存量</th>
                 <th scope="col">安全存量</th>
+                <th scope="col">建議訂購批量</th>
             </tr>
         </thead>
         <tbody>
@@ -16,6 +30,7 @@
                 <td>{{name}}</td>
                 <td>{{inventory}}</td>
                 <td>{{safeInventory}}</td>
+                <td>{{eoq}}</td>
             </tr>
             {{/each}}
         </tbody>
@@ -25,38 +40,35 @@
     <div class="alert alert-danger" role="alert">
         (注意) {{name}}存貨數量即將不足，請立即向{{supplier}}訂購。
     </div>
-    {{/each}}
-	
-	{{#each closeToROPIngredients}}
+    {{/each}} {{#each closeToROPIngredients}}
     <div class="alert alert-warning" role="alert">
         (注意) {{name}}存貨數量即將於{{dayRatio}}天內低於安全存量，請適時監控。
     </div>
     {{/each}}
     <h1 style="margin-top:60px">補貨</h1>
 
-    <form>
+    <form action="./ingredient-management/process" method="post">
         <div class="form-group">
             <label for="exampleFormControlSelect1">原料名稱</label>
-            <select class="form-control" id="exampleFormControlSelect1">
+            <select class="form-control" name="ingredientName">
                 {{#each ingredientKinds}}
-                <option id="{{id}}">{{name}}</option> 
+                <option value="{{id}}">{{name}}</option>
                 {{/each}}
             </select>
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">單價</label>
-            <input type="text" class="form-control" id="unit_cost" placeholder="unit_cost">
+            <input type="text" class="form-control" name="unitCost" placeholder="unit_cost">
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">數量</label>
-            <input type="text" class="form-control" id="purchase_quantity" placeholder="purchase_quantity">
+            <input type="text" class="form-control" name="purchaseQuantity" placeholder="purchase_quantity">
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect2">購買日期</label>
-            <input type="date" class="form-control" id="purchase_date" placeholder="purchase_quantity">
+            <input type="date" class="form-control" name="purchaseDate" placeholder="purchase_quantity">
         </div>
-        <a href="#" class="btn btn-primary btn-primary">
-            <span class="glyphicon glyphicon-send"></span> 送出</a>
+        <input type="submit" class="btn btn-primary" value="送出">
     </form>
 </div>
 <!-- /container -->

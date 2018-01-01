@@ -30,6 +30,18 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(require('express-session')({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'this is secret haha',
+}));
+
+app.use(function (req, res, next) {
+    res.locals.flash = req.session.flash;
+    delete req.session.flash;
+    next();
+});
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/company', company);

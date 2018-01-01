@@ -24,6 +24,7 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "express-mysql-session": "^1.2.3",
+    "express-session": "^1.15.6",
     "hbs": "~4.0.1",
     "morgan": "~1.8.1",
     "mysql": "^2.15.0",
