@@ -137,14 +137,23 @@ exports.process = (req, res, next) => {
     });
 
     Promise.all([promise1, promise2]).then(() => {
-            req.session.flash = {
-                title: '補貨資料填寫成功',
-                ingredientName: `${req.body.ingredientName}`,
-                purchaseQuantity: `${req.body.purchaseQuantity}`,
-                purchaseDate: `${req.body.purchaseDate}`,
-                unitCost: `${req.body.unitCost}`
-            };
-            res.redirect(303, '/company/ingredient-management');
+
+            return new Promise((resolve, reject) => {
+                var sql = `select name from ingredient where id=${req.body.ingredientName}`;
+                connection.query(sql, (error, result) => {
+                    if (error)
+                        throw error;
+                    req.session.flash = {
+                        title: '補貨資料填寫成功',
+                        ingredientName: result[0].name,
+                        purchaseQuantity: `${req.body.purchaseQuantity}`,
+                        purchaseDate: `${req.body.purchaseDate}`,
+                        unitCost: `${req.body.unitCost}`
+                    };
+                    res.redirect(303, '/company/ingredient-management');
+                    resolve();
+                });
+            });
         })
         .catch((error) => {
             console.log(error);

@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var hbs = require('hbs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -29,6 +30,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//section Helper
+hbs.registerHelper('section', function (name, options) {
+    if (!this._sections)
+        this._sections = {};
+    this._sections[name] = options.fn(this);
+});
 
 app.use(require('express-session')({
     resave: false,
