@@ -18,10 +18,4 @@ router.post('/ingredient-management/process', IM.process);
 
 router.get('/schedule', SC.home);
 
-router.get('/order-management', function (req, res, next) {
-    res.render('company/order-management', {
-        title: '訂單管理'
-    });
-});
-
 module.exports = router;

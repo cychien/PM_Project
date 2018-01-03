@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
     port: 3306,
 });
 
-connection.connect();
+// connection.connect();
 
 exports.home = (req, res, next) => {
 
