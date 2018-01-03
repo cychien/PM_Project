@@ -22,6 +22,7 @@ exports.home = (req, res, next) => {
 					and make.customer_id=customer.id\
 					and make.order_id=`order`.id\
 					and product.id = include.product_id\
+					and estimated_arrived_date>now()\
 					group by `order`.id;'
 		connection.query(sql, (error, result) => {
         if (error) {
@@ -81,12 +82,12 @@ exports.home = (req, res, next) => {
 .then(() => {
 			
 			
-			var p = new Promise((resolve, reject) => {
+			return new Promise((resolve, reject) => {
             var sql = 'SELECT ingredient.id,ingredient.name,inventory,eoq,\
-							DATE_ADD(current_date(), interval ((inventory-safe_inventory)/day_demand) DAY) as `dateToPurchase`,\
-							DATE_ADD(current_date(), interval ((inventory-safe_inventory)/day_demand)+lead_time DAY) as `dateToArrive`\
-							FROM pmproject.ingredient\
-							where inventory>safe_inventory and ((inventory-safe_inventory)/day_demand)<3;'
+						DATE_ADD(current_date(), interval ((inventory-safe_inventory)/day_demand) DAY) as `dateToPurchase`,\
+						DATE_ADD(current_date(), interval ((inventory-safe_inventory)/day_demand)+lead_time DAY) as `dateToArrive`\
+						FROM pmproject.ingredient\
+						where inventory>safe_inventory and ((inventory-safe_inventory)/day_demand)<3;'
 						   
                 connection.query(sql, function (error, result) {
                     if (error) {
