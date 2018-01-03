@@ -53,6 +53,35 @@ exports.home = (req, res, next) => {
 
     //尋找每樣ingredient的purchase date
     promise.then(() => {
+		var p = new Promise((resolve, reject) => {
+			var sql = "SELECT ingredient_id,is_made_of.qty/3*sum(include.qty) as estimatedDemand\
+					   FROM pmproject.include,pmproject.`order`,pmproject.is_made_of\
+					   where to_days(now())-to_days(`order`.date) <=90\
+					   and include.order_id=`order`.id\
+					   and include.product_id=is_made_of.product_id\
+					   group by ingredient_id,include.product_id"
+			connection.query(sql, (error, result)=> {
+				if (error) {
+					reject(error);
+				}
+				for(let j = 0; j < data.ingredients.length; j++) {
+					data.ingredients[j].estimatedDemand = 0;
+				}
+				for(let i=0; i<result.length; i++) {
+					let selectId = result[i].ingredient_id;
+					for(let j = 0; j < data.ingredients.length; j++) {
+						if(data.ingredients[j].id === selectId) {
+							data.ingredients[j].estimatedDemand += Number(result[i].estimatedDemand);
+							data.ingredients[j].estimatedDemand = Math.floor(data.ingredients[j].estimatedDemand*100)/100;
+							break;
+						}
+					}					
+				}
+				resolve();
+			})
+		})
+	})
+	.then(() => {
 
             //先找立即過期的ingredient
             var outOfInventoryIngredients = [];
@@ -60,6 +89,7 @@ exports.home = (req, res, next) => {
             return new Promise((resolve, reject) => {
                 var sql = 'SELECT ingredient.id,ingredient.name,inventory,safe_inventory,day_demand, supplier.name AS supplierName FROM pmproject.ingredient,pmproject.supplier\
 						   where inventory<safe_inventory and supplier.id=ingredient.supplier_id';
+						   
                 connection.query(sql, function (error, result) {
                     if (error) {
                         throw error;

@@ -22,6 +22,7 @@
                 <th scope="col">剩餘存量</th>
                 <th scope="col">安全存量</th>
                 <th scope="col">建議訂購批量</th>
+				<th scope="col">每月預測需求</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                 <td>{{inventory}}</td>
                 <td>{{safeInventory}}</td>
                 <td>{{eoq}}</td>
+				<td>{{estimatedDemand}}</td>
             </tr>
             {{/each}}
         </tbody>
