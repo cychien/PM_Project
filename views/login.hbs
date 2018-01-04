@@ -1,0 +1,63 @@
+<!-- views/login.ejs -->
+<!doctype html>
+<html>
+
+<head>
+    <title>YihShunShiuan</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <!-- load fontawesome -->
+    <style>
+        @import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            padding-top: 80px;
+        }
+    </style>
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h1>
+                <span class="fa fa-sign-in"></span> 登入</h1>
+
+            <!-- show any messages that come back with authentication -->
+            {{#if message}}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+            {{/if}}
+
+            <!-- LOGIN FORM -->
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label>使用者名稱</label>
+                    <input type="text" class="form-control" name="username">
+                </div>
+                <div class="form-group">
+                    <label>密碼</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div class="form-group" style="display: none">
+                    <label>Remember Me</label>
+                    <input type="checkbox" class="form-control" name="remember" value="yes">
+                </div>
+
+                <button type="submit" class="btn btn-warning btn-lg">Login</button>
+            </form>
+
+            <hr>
+
+            <p>還不是會員?
+                <a href="/signup"> 註冊</a>
+            </p>
+            <p>或回
+                <a href="/"> 首頁</a>.</p>
+        </div>
+    </div>
+</body>
+
+</html>

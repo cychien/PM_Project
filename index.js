@@ -5,9 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var hbs = require('hbs');
+var session = require('express-session');
+var passport = require('passport');
+var flash = require('connect-flash');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+require('./config/passport')(passport);
+
+// var index = require('./routes/index');
 var company = require('./routes/company');
 
 var app = express();
@@ -38,11 +42,14 @@ hbs.registerHelper('section', function (name, options) {
     this._sections[name] = options.fn(this);
 });
 
-app.use(require('express-session')({
-    resave: false,
-    saveUninitialized: false,
-    secret: 'this is secret haha',
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'vidyapathaisalwaysrunning',
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 app.use(function (req, res, next) {
     res.locals.flash = req.session.flash;
@@ -50,8 +57,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', index);
-app.use('/users', users);
+require('./routes/routes.js')(app, passport);
 app.use('/company', company);
 
 // catch 404 and forward to error handler
