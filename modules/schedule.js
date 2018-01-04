@@ -18,6 +18,7 @@ exports.home = (req, res, next) => {
 					and make.customer_id=customer.id\
 					and make.order_id=`order`.id\
 					and product.id = include.product_id\
+					and estimated_arrived_date>now()\
 					group by `order`.id;'
                 connection.query(sql, (error, result) => {
                     if (error) {
